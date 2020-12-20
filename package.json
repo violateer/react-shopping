@@ -2,6 +2,7 @@
   "name": "react-shopping",
   "version": "1.0.0",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node back/server.js",
     "server": "nodemon back/server.js",
