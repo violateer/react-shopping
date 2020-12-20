@@ -1,0 +1,14 @@
+{
+  "name": "react-shopping",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node back/server"
+  },
+  "repository": "git@github.com:violateer/react-shopping.git",
+  "author": "violateer <1828257089@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
