@@ -1,6 +1,8 @@
 const express = require('express');
 const products = require('./data/products');
+const dotenv = require('dotenv');
 
+dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -17,4 +19,4 @@ app.get('/api/products/:id', (req, res) => {
     res.json(product);
 });
 
-app.listen(port, () => console.log(`服务器已经在${port}端口运行...`));
+app.listen(port, () => console.log(`服务器已经在${process.env.NODE_ENV}模式下${port}端口运行...`));
