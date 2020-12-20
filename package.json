@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node back/server"
+    "start": "node back/server.js",
+    "server": "nodemon back/server.js",
+    "client": "yarn --cwd front start",
+    "dev": "concurrently \"yarn server\" \"yarn client\""
   },
   "repository": "git@github.com:violateer/react-shopping.git",
   "author": "violateer <1828257089@qq.com>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
   }
 }
