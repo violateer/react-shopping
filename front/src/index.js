@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// bootstrap主题样式
+import './bootstrap.min.css';
+
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
