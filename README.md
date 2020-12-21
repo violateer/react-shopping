@@ -5,6 +5,10 @@
 + ```
   NODE_ENV = development
   PORT = 5000
+  MONGO_URI = 'mongodb://<username>:<password>@<host>:<port>/<dbname>?authSource=<dbname>';
+  MONGO_DB = '<dbname>'
+  MONGO_USER = '<username>'
+  MONGO_PASS = '<password>'
   ```
 
 
