@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import colors from 'colors';
 import connectDB from './config/db.js';
 import products from './data/products.js';
 
@@ -22,4 +23,4 @@ app.get('/api/products/:id', (req, res) => {
     res.json(product);
 });
 
-app.listen(port, () => console.log(`服务器已经在${process.env.NODE_ENV}模式下${port}端口运行...`));
+app.listen(port, () => console.log(`服务器已经在${process.env.NODE_ENV}模式下${port}端口运行...`.magenta.bold));
