@@ -9,7 +9,8 @@ const router = express.Router();
  * @route GET /api/products
  * @access 公开
  */
-router.get('/', asyncHandler(async (req, res) => {
+router.get('/',
+    asyncHandler(async (req, res) => {
         const products = await Product.find({});
         if (products) {
             res.json(products);
@@ -25,7 +26,8 @@ router.get('/', asyncHandler(async (req, res) => {
  * @route GET /api/products:id
  * @access 公开
  */
-router.get('/:id', asyncHandler(async (req, res) => {
+router.get('/:id',
+    asyncHandler(async (req, res) => {
         const product = await Product.findById(req.params.id);
         if (product) {
             res.json(product);
