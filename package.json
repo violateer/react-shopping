@@ -7,7 +7,9 @@
     "start": "node back/server.js",
     "server": "nodemon back/server.js",
     "client": "yarn --cwd front start",
-    "dev": "concurrently \"yarn server\" \"yarn client\""
+    "dev": "concurrently \"yarn server\" \"yarn client\"",
+    "data:insert": "node back/seeder",
+    "data:destroy": "node back/seeder -d"
   },
   "repository": "git@github.com:violateer/react-shopping.git",
   "author": "violateer <1828257089@qq.com>",
