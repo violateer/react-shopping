@@ -1,6 +1,5 @@
 import express from 'express';
 import Product from '../models/productModel.js';
-import { awaitWrap } from '../config/tools.js';
 import asyncHandler from 'express-async-handler';
 
 const router = express.Router();
@@ -11,7 +10,7 @@ const router = express.Router();
  * @access 公开
  */
 router.get('/', asyncHandler(async (req, res) => {
-        const products = await awaitWrap(Product.find({}));
+        const products = await Product.find({});
         if (products) {
             res.json(products);
         } else {
