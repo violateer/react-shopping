@@ -25,7 +25,7 @@ const CartScreen = ({ match, location, history }) => {
     
     // 支付
     const checkoutHandler = () => {
-        console.log('zhifu ');
+        history.push('/login?redirect=shipping');
     };
     
     return (
