@@ -3,6 +3,37 @@ import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 
 /**
+ * @desc 用户注册
+ * @route POST /api/users
+ * @access 公开
+ */
+export const registerUser = asyncHandler(async (req, res) => {
+    const { name, email, password } = req.body;
+    
+    const userExists = await User.findOne({ email });
+    // 用户已存在
+    if (userExists) {
+        res.status(400);
+        throw new Error('用户已注册');
+    }
+    // 注册用户
+    const user = await User.create({ name, email, password });
+    if (user) {
+        res.status(201);
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
+        });
+    } else {
+        res.status(400);
+        throw new Error('无效的用户信息');
+    }
+});
+
+/**
  * @desc 用户身份验证 & 获取token
  * @route POST /api/users/login
  * @access 公开
@@ -19,7 +50,7 @@ export const authUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            token: 'Bearer ' + generateToken(user._id)
+            token: generateToken(user._id)
         });
     } else {
         res.status(401);
