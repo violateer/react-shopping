@@ -1,5 +1,6 @@
 import User from '../models/userModel.js';
 import asyncHandler from 'express-async-handler';
+import generateToken from '../utils/generateToken.js';
 
 /**
  * @desc 用户身份验证 & 获取token
@@ -18,7 +19,7 @@ export const authUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            token: 'token'
+            token: generateToken(user._id)
         });
     } else {
         res.status(401);
