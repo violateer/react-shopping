@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../actions/cartActions';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 import Message from '../components/Message';
 
 const CartScreen = ({ match, location, history }) => {
@@ -20,7 +20,7 @@ const CartScreen = ({ match, location, history }) => {
     
     // 删除产品
     const removeFromCartHandler = (id) => {
-        console.log(id + '已删除');
+        dispatch(removeFromCart(id));
     };
     
     // 支付
