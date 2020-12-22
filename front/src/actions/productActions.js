@@ -24,7 +24,6 @@ export const listProducts = () => async (dispatch) => {
 };
 
 // 获取单个产品的action
-
 export const listProductDetails = (id) => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_DETAILS_REQUEST });
