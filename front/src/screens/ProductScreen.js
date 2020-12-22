@@ -59,6 +59,7 @@ const ProductScreen = ({ history, match }) => {
                                             <Col>数量：</Col>
                                             <Col>
                                                 {/* 待添加库存为零的处理 */}
+                                                {/* CartScreen组件也用到了 */}
                                                 <Form.Control as='select' value={qty}
                                                               onChange={e => setQty(e.target.value)}>
                                                     {[...Array(product.countInStock).keys()].map(i => (
