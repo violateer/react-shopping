@@ -1,4 +1,4 @@
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS } from '../constants/userConstants';
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT } from '../constants/userConstants';
 import axios from 'axios';
 
 // 用户登录action
@@ -24,4 +24,10 @@ export const login = (email, password) => async (dispatch) => {
                      && err.response.data.message ? err.response.data.message : err.message
         });
     }
+};
+
+// 用户退出action
+export const logout = () => async (dispatch) => {
+    localStorage.removeItem('userInfo');
+    dispatch({ type: USER_LOGOUT });
 };
