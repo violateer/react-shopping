@@ -1,4 +1,4 @@
-import Order from '../models/orderModel';
+import Order from '../models/orderModel.js';
 import asyncHandler from 'express-async-handler';
 
 /**
@@ -7,7 +7,7 @@ import asyncHandler from 'express-async-handler';
  * @access 私密
  */
 export const addOrderItems = asyncHandler(async (req, res) => {
-    const { orderItems, shippingAddress, paymentMethod, itemPrice, shippingPrice, totalPrice } = req.body;
+    const { orderItems, shippingAddress, paymentMethod, itemsPrice, shippingPrice, totalPrice } = req.body;
     
     if (orderItems && orderItems === 0) {
         res.status(400);
@@ -18,7 +18,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
             orderItems,
             shippingAddress,
             paymentMethod,
-            itemPrice,
+            itemsPrice,
             shippingPrice,
             totalPrice
         });

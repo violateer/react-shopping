@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Row, Col, Image, Card, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckOutSteps from '../components/CheckOutSteps';
 import Message from '../components/Message';
 import { Link } from 'react-router-dom';
+import { createOrder } from '../actions/orderActions';
 
-const PlaceorderScreen = () => {
+const PlaceorderScreen = ({ history }) => {
     const cart = useSelector(state => state.cart);
-    const { province, city, address, postalCode } = cart.shippingAddress;
-    const { paymentMethod, cartItems } = cart;
+    
+    const { paymentMethod, cartItems, shippingAddress } = cart;
+    const { province, city, address, postalCode } = shippingAddress;
+    
+    const dispatch = useDispatch();
     
     // 设置金额保留后两位
     const addDecimals = num => {
@@ -20,9 +24,25 @@ const PlaceorderScreen = () => {
     const shippingPrice = addDecimals(itemsPrice > 5000 ? 0 : 20);
     const totalPrice = addDecimals(Number(itemsPrice) + Number(shippingPrice));
     
+    const orderCreate = useSelector(state => state.orderCreate);
+    const { order, success, error } = orderCreate;
+    
+    useEffect(() => {
+        if (success) {
+            history.push(`/order/${order._id}`);
+        }
+    }, [history, success, order]);
+    
     // 提交订单
     const placeorderHandler = () => {
-        console.log('提交订单');
+        dispatch(createOrder({
+            orderItems: cartItems,
+            shippingAddress,
+            paymentMethod,
+            itemsPrice,
+            shippingPrice,
+            totalPrice
+        }));
     };
     
     return (
@@ -89,6 +109,9 @@ const PlaceorderScreen = () => {
                                     <Col>订单总价</Col>
                                     <Col>￥{totalPrice}</Col>
                                 </Row>
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                {error && <Message variant='danger'>{error}</Message>}
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Button type='button' className='btn-block' onClick={placeorderHandler}
