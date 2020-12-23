@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Button, Row, Col, Image, Card, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckOutSteps from '../components/CheckOutSteps';
