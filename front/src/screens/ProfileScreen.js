@@ -61,7 +61,7 @@ const ProfileScreen = ({ location, history }) => {
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId='name'>
                             <Form.Label>用户名：</Form.Label>
-                            <Form.Control type='name' placeholder='请输入用户名' value={name}
+                            <Form.Control type='text' placeholder='请输入用户名' value={name}
                                           onChange={e => setName(e.target.value)}>
                             </Form.Control>
                         </Form.Group>
