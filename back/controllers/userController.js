@@ -78,3 +78,34 @@ export const getUserProfile = asyncHandler(async (req, res) => {
         throw new Error('用户不存在');
     }
 });
+
+/**
+ * @desc 更新用户信息-带token
+ * @route POST /api/users/profile
+ * @access 私密
+ */
+export const updateUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    
+    if (user) {
+        // 获取需要更新的资料
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        if (req.body.password) {
+            user.password = req.body.password;
+        }
+        const updateUser = await user.save();
+        // 返回更新后的用户信息
+        res.json({
+            _id: updateUser._id,
+            name: updateUser.name,
+            email: updateUser.email,
+            isAdmin: updateUser.isAdmin,
+            token: generateToken(updateUser._id)
+        });
+    } else {
+        res.status(404);
+        throw new Error('用户不存在');
+    }
+});
+
