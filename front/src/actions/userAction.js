@@ -1,4 +1,5 @@
 import {
+    USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -60,6 +61,31 @@ export const register = (name, email, password) => async (dispatch) => {
     } catch (err) {
         dispatch({
             type: USER_REGISTER_FAIL,
+            payload: err.response
+                     && err.response.data.message ? err.response.data.message : err.message
+        });
+    }
+};
+
+// 用户信息action
+export const getUserDetails = (id) => async (dispatch, getState) => {
+    try {
+        dispatch({ type: USER_DETAILS_REQUEST });
+        // 获取登陆用户的信息
+        const { userLogin: { userInfo } } = getState();
+        
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const { data } = await axios.get(`/api/users/${id}`, config);
+        dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+    } catch (err) {
+        dispatch({
+            type: USER_DETAILS_FAIL,
             payload: err.response
                      && err.response.data.message ? err.response.data.message : err.message
         });
