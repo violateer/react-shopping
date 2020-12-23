@@ -6,7 +6,7 @@ import {
     USER_LOGOUT,
     USER_REGISTER_FAIL,
     USER_REGISTER_REQUEST,
-    USER_REGISTER_SUCCESS
+    USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS
 } from '../constants/userConstants';
 import axios from 'axios';
 
@@ -86,6 +86,31 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     } catch (err) {
         dispatch({
             type: USER_DETAILS_FAIL,
+            payload: err.response
+                     && err.response.data.message ? err.response.data.message : err.message
+        });
+    }
+};
+
+// 更新用户信息action
+export const updateUserDetails = (user) => async (dispatch, getState) => {
+    try {
+        dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
+        // 获取登陆用户的信息
+        const { userLogin: { userInfo } } = getState();
+        
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const { data } = await axios.put(`/api/users/profile`, user, config);
+        dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
+    } catch (err) {
+        dispatch({
+            type: USER_UPDATE_PROFILE_FAIL,
             payload: err.response
                      && err.response.data.message ? err.response.data.message : err.message
         });

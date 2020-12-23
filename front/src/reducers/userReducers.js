@@ -7,7 +7,7 @@ import {
     USER_LOGOUT,
     USER_REGISTER_FAIL,
     USER_REGISTER_REQUEST,
-    USER_REGISTER_SUCCESS
+    USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS
 } from '../constants/userConstants';
 
 // 用户登录reducer
@@ -75,6 +75,32 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
             return {
                 loading: false,
                 error: action.payload
+            };
+        case USER_LOGOUT:
+            return {};
+        default:
+            return state;
+    }
+};
+
+// 更新用户信息reducer
+export const userUpdateProfileReducer = (state = {}, action) => {
+    switch (action.type) {
+        case USER_UPDATE_PROFILE_REQUEST:
+            return {
+                loading: true
+            };
+        case USER_UPDATE_PROFILE_SUCCESS:
+            return {
+                loading: false,
+                userInfo: action.payload,
+                success: true
+            };
+        case USER_UPDATE_PROFILE_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
+                success: false
             };
         // case USER_LOGOUT:
         //     return {};
