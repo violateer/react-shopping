@@ -18,8 +18,8 @@ const CheckOutSteps = ({ step1, step2, step3, step4 }) => {
                        : <Nav.Link disabled>支付</Nav.Link>}
             </Nav.Item>
             <Nav.Item>
-                {step4 ? <LinkContainer to='/placeorder'><Nav.Link>确定下单</Nav.Link></LinkContainer>
-                       : <Nav.Link disabled>确定下单</Nav.Link>}
+                {step4 ? <LinkContainer to='/placeorder'><Nav.Link>确认下单</Nav.Link></LinkContainer>
+                       : <Nav.Link disabled>确认下单</Nav.Link>}
             </Nav.Item>
         </Nav>
     );

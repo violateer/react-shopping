@@ -20,23 +20,28 @@ const reducer = combineReducers({
     userUpdateProfile: userUpdateProfileReducer
 });
 
-// 获取本地购物车信息
+// 获取本地存储的购物车信息
 const cartItemFromStorage = localStorage.getItem('cartItems')
                             ? JSON.parse(localStorage.getItem('cartItems'))
                             : [];
-// 获取本地登陆用户信息
+// 获取本地存储的登陆用户信息
 const userInfoFromStorage = localStorage.getItem('userInfo')
                             ? JSON.parse(localStorage.getItem('userInfo'))
                             : null;
-// 获取本地收货地址
+// 获取本地存储的收货地址
 const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
                                    ? JSON.parse(localStorage.getItem('shippingAddress'))
                                    : {};
+// 获取本地存储的支付方式
+const paymentMethodFromStorage = localStorage.getItem('paymentMethod')
+                                 ? JSON.parse(localStorage.getItem('paymentMethod'))
+                                 : '';
 
 const initialState = {
     cart: {
         cartItems: cartItemFromStorage,
-        shippingAddress: shippingAddressFromStorage
+        shippingAddress: shippingAddressFromStorage,
+        paymentMethod: paymentMethodFromStorage
     },
     userLogin: { userInfo: userInfoFromStorage }
 };
