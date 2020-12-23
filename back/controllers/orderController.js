@@ -27,3 +27,19 @@ export const addOrderItems = asyncHandler(async (req, res) => {
         res.status(201).json(createOrder);
     }
 });
+
+/**
+ * @desc 获取订单-依据订单id
+ * @route GET /api/orders/:id
+ * @access 私密
+ */
+export const getOrderItems = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id).populate('user', 'name email');
+    
+    if (order) {
+        res.json(order);
+    } else {
+        res.status(404);
+        throw new Error('查找不到订单');
+    }
+});
