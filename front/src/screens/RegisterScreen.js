@@ -18,6 +18,8 @@ const RegisterScreen = ({ location, history }) => {
         const userRegister = useSelector(state => state.userRegister);
         const { loading, error, userInfo } = userRegister;
         
+        console.log(userInfo);
+        
         useEffect(() => {
             if (userInfo) {
                 history.push(redirect);
@@ -61,7 +63,7 @@ const RegisterScreen = ({ location, history }) => {
                                       onChange={e => setPassword(e.target.value)}>
                         </Form.Control>
                     </Form.Group>
-                    <Form.Group controlId='password'>
+                    <Form.Group controlId='confirmPassword'>
                         <Form.Label>确认密码：</Form.Label>
                         <Form.Control type='password' placeholder='请确认密码' value={confirmPassword}
                                       onChange={e => setConfirmPassword(e.target.value)}>
