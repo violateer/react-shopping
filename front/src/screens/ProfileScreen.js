@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails, updateUserDetails } from '../actions/userAction';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
 const ProfileScreen = ({ location, history }) => {
         const [name, setName] = useState('');
@@ -28,13 +29,15 @@ const ProfileScreen = ({ location, history }) => {
                 return;
             }
             
-            if (!user.name) {
+            if (!user.name || success) {
+                // 重置用户信息
+                dispatch({ type: USER_UPDATE_PROFILE_RESET });
                 dispatch(getUserDetails('profile'));
             } else {
                 setName(user.name);
                 setEmail(user.email);
             }
-        }, [dispatch, history, userInfo, user]);
+        }, [dispatch, history, userInfo, user, success]);
         
         // 表单提交-更新用户信息
         const submitHandler = (e) => {
