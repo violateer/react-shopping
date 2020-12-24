@@ -130,6 +130,8 @@ export const userListReducer = (state = { users: [] }, action) => {
                 loading: false,
                 error: action.payload
             };
+        case USER_LOGOUT:
+            return { users: [] };
         default:
             return state;
     }

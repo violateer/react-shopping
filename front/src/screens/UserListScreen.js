@@ -6,14 +6,20 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserList } from '../actions/userActions';
 
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
         const dispatch = useDispatch();
         const userList = useSelector(state => state.userList);
         const { loading, error, users } = userList;
+        const userLogin = useSelector(state => state.userLogin);
+        const { userInfo } = userLogin;
         
         useEffect(() => {
-            dispatch(getUserList());
-        }, [dispatch]);
+            if (userInfo && userInfo.isAdmin) {
+                dispatch(getUserList());
+            } else {
+                history.push('/login');
+            }
+        }, [dispatch, userInfo, history]);
         
         // 删除
         const deleteHandler = (id) => {
