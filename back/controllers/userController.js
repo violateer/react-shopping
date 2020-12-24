@@ -109,3 +109,12 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @desc 获取所有用户信息-带token-仅限管理员
+ * @route GET /api/users
+ * @access 私密
+ */
+export const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
+});
