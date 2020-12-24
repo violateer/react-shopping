@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { productDetailsReducer, productListReducer } from './reducers/productReducers';
 import { cartReducer } from './reducers/cartReducers';
 import {
+    userDeleteReducer,
     userDetailsReducer, userListReducer,
     userLoginReducer,
     userRegisterReducer,
@@ -21,7 +22,8 @@ const reducer = combineReducers({
     userUpdateProfile: userUpdateProfileReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
-    userList: userListReducer
+    userList: userListReducer,
+    userDelete: userDeleteReducer
 });
 
 // 获取本地存储的购物车信息

@@ -1,4 +1,6 @@
 import {
+    USER_DELETE_FAIL,
+    USER_DELETE_REQUEST, USER_DELETE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS,
@@ -132,6 +134,29 @@ export const userListReducer = (state = { users: [] }, action) => {
             };
         case USER_LOGOUT:
             return { users: [] };
+        default:
+            return state;
+    }
+};
+
+// 删除单个用户reducer
+export const userDeleteReducer = (state = {}, action) => {
+    switch (action.type) {
+        case USER_DELETE_REQUEST:
+            return {
+                loading: true,
+                ...state
+            };
+        case USER_DELETE_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case USER_DELETE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
         default:
             return state;
     }

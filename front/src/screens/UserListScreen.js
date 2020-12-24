@@ -4,7 +4,7 @@ import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getUserList } from '../actions/userActions';
+import { deleteUser, getUserList } from '../actions/userActions';
 
 const UserListScreen = ({ history }) => {
         const dispatch = useDispatch();
@@ -12,6 +12,8 @@ const UserListScreen = ({ history }) => {
         const { loading, error, users } = userList;
         const userLogin = useSelector(state => state.userLogin);
         const { userInfo } = userLogin;
+        const userDelete = useSelector(state => state.userDelete);
+        const { success: deleteSuccess } = userDelete;
         
         useEffect(() => {
             if (userInfo && userInfo.isAdmin) {
@@ -19,11 +21,13 @@ const UserListScreen = ({ history }) => {
             } else {
                 history.push('/login');
             }
-        }, [dispatch, userInfo, history]);
+        }, [dispatch, userInfo, history, deleteSuccess]);
         
         // 删除
         const deleteHandler = (id) => {
-            console.log('删除' + id);
+            if (window.confirm('Sure to delete?')) {
+                dispatch(deleteUser(id));
+            }
         };
         
         return (

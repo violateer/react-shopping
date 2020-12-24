@@ -59,9 +59,9 @@ export const authUser = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc 获取用户信息-带token
+ * @desc 获取用户信息
  * @route GET /api/users/profile
- * @access 私密
+ * @access 私密-带token
  */
 export const getUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -80,9 +80,9 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc 更新用户信息-带token
+ * @desc 更新用户信息
  * @route POST /api/users/profile
- * @access 私密
+ * @access 私密-带token
  */
 export const updateUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -110,11 +110,27 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc 获取所有用户信息-带token-仅限管理员
+ * @desc 获取所有用户信息
  * @route GET /api/users
- * @access 私密
+ * @access 私密-带token-仅限管理员
  */
 export const getUsers = asyncHandler(async (req, res) => {
     const users = await User.find({});
     res.json(users);
+});
+
+/**
+ * @desc 删除注册用户
+ * @route DELETE /api/users/:id
+ * @access 私密-带token-仅限管理员
+ */
+export const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        const result = await user.remove();
+        res.json({ message: '用户已删除' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
