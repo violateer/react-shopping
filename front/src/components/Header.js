@@ -31,6 +31,20 @@ const Header = () => {
                                 </Nav.Link>
                             </LinkContainer>
                             
+                            {userInfo && userInfo.isAdmin && (
+                                <NavDropdown title='管理' id='adminMenu'>
+                                    <LinkContainer to='/admin/userlist'>
+                                        <NavDropdown.Item>用户列表</NavDropdown.Item>
+                                    </LinkContainer>
+                                    <LinkContainer to='/admin/productlist'>
+                                        <NavDropdown.Item>产品列表</NavDropdown.Item>
+                                    </LinkContainer>
+                                    <LinkContainer to='/admin/orderlist'>
+                                        <NavDropdown.Item>订单列表</NavDropdown.Item>
+                                    </LinkContainer>
+                                </NavDropdown>
+                            )}
+                            
                             {userInfo ? (
                                 <NavDropdown title={userInfo.name} id='username'>
                                     <LinkContainer to='/profile'>
@@ -45,6 +59,7 @@ const Header = () => {
                                      </Nav.Link>
                                  </LinkContainer>
                              )}
+                        
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
