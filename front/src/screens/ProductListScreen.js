@@ -4,7 +4,8 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { deleteProduct, listProducts } from '../actions/productActions';
+import { deleteProduct, listProducts, createProduct } from '../actions/productActions';
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 const ProductListScreen = ({ history }) => {
     const dispatch = useDispatch();
@@ -18,13 +19,27 @@ const ProductListScreen = ({ history }) => {
     const productDelete = useSelector(state => state.productDelete);
     const { loading: deleteLoading, error: deleteError, success: deleteSuccess } = productDelete;
     
+    const productCreate = useSelector(state => state.productCreate);
+    const {
+        loading: createLoading,
+        error: createError,
+        success: createSuccess,
+        product: createProduct
+    } = productCreate;
+    
     useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
-            dispatch(listProducts());
-        } else {
+        // 重置创建产品的state
+        dispatch({ type: PRODUCT_CREATE_RESET });
+        
+        if (!userInfo.isAdmin) {
             history.push('/login');
         }
-    }, [dispatch, userInfo, history, deleteSuccess]);
+        if (createSuccess) {
+            history.push(`/admin/product/${createProduct._id}/edit`);
+        } else {
+            dispatch(listProducts());
+        }
+    }, [dispatch, userInfo, history, deleteSuccess, createSuccess, createProduct]);
     
     // 删除
     const deleteHandler = (id) => {
@@ -35,7 +50,7 @@ const ProductListScreen = ({ history }) => {
     
     // 创建产品
     const createProductHandler = () => {
-        console.log('添加产品');
+        dispatch(createProduct());
     };
     
     return (
@@ -46,6 +61,8 @@ const ProductListScreen = ({ history }) => {
                     <Button className='my-3' onClick={createProductHandler}>添加产品</Button>
                 </Col>
             </Row>
+            {createLoading && <Loader/>}
+            {createError && <Message variant='danger'>{createError}</Message>}
             {deleteLoading && <Loader/>}
             {deleteError && <Message variant='danger'>{deleteError}</Message>}
             {loading ? <Loader/>
