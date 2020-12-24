@@ -161,7 +161,7 @@ export const updateUserById = asyncHandler(async (req, res) => {
         // 获取需要更新的资料
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
-        user.isAdmin = req.body.isAdmin || user.isAdmin;
+        user.isAdmin = req.body.isAdmin;
         const updateUser = await user.save();
         // 返回更新后的用户信息
         res.json({
