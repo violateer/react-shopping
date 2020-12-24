@@ -1,10 +1,10 @@
 import express from 'express';
 import {
     authUser,
-    deleteUser,
+    deleteUser, getUserById,
     getUserProfile,
     getUsers,
-    registerUser,
+    registerUser, updateUserById,
     updateUserProfile
 } from '../controllers/userController.js';
 import { isAdmin, protect } from '../middleware/authMiddleware.js';
@@ -27,6 +27,8 @@ router
 
 router
     .route('/:id')
-    .delete(protect, isAdmin, deleteUser);
+    .delete(protect, isAdmin, deleteUser)
+    .get(protect, isAdmin, getUserById)
+    .put(protect, isAdmin, updateUserById);
 
 export default router;
