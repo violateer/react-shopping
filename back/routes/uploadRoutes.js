@@ -1,6 +1,6 @@
+import path from 'path';
 import express from 'express';
 import multer from 'multer';
-import path from 'path';
 import { isAdmin, protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -12,8 +12,8 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/');
     },
     // 文件存储前重命名
-    filename (req, file, ch) {
-        cb(null, `${file.filename}-${Date.now()}${path.extname(file.originalname)}`);
+    filename (req, file, cb) {
+        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
     }
 });
 
@@ -24,22 +24,22 @@ const checkFileType = (file, cb) => {
     // 判断文件扩展名
     const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
     // 验证资源的而媒体类型
-    const mimeType = fileTypes.test(file.mimeType);
+    const mimetype = fileTypes.test(file.mimetype);
     
-    if (extname && mimeType) {
+    if (extname && mimetype) {
         return cb(null, true);
     } else {
-        cb('仅限图片格式为jpg|jpeg|png！');
+        cb(new Error('仅限图片格式为jpg|jpeg|png！'));
     }
 };
 
-// 文件过滤函数
-const fileFilter = (req, file, cb) => {
-    checkFileType(file, cb);
-};
-
 // 上传文件
-const upload = multer({ storage, fileFilter });
+const upload = multer({
+    storage,
+    fileFilter: function (req, file, cb) {
+        checkFileType(file, cb);
+    }
+});
 
 // 创建文件上传路由
 router.post('/', protect, isAdmin, upload.single('image'), (req, res) => {
