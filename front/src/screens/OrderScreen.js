@@ -5,6 +5,7 @@ import Message from '../components/Message';
 import { Link } from 'react-router-dom';
 import { getOrderDetails } from '../actions/orderActions';
 import Loader from '../components/Loader';
+import axios from 'axios';
 
 const OrderScreen = ({ match }) => {
     const orderId = match.params.id;
@@ -12,6 +13,8 @@ const OrderScreen = ({ match }) => {
     
     // 弹出框状态
     const [show, setShow] = useState(false);
+    const [image, setImage] = useState('');
+    const [text, setText] = useState('请扫码');
     
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
@@ -26,8 +29,26 @@ const OrderScreen = ({ match }) => {
     const handleClose = () => {
         setShow(false);
     };
-    const handleShow = () => {
+    const handlePayment = () => {
+        setImage(`https://www.thenewstep.cn/pay/index.php?pid=${order._id}`);
         setShow(true);
+        
+        // 设置定时器监听支付
+        let timer = setInterval(() => {
+            // 请求支付status
+            axios.get('/status').then(res => {
+                if (res.data.status === 0) {
+                    setText('请扫码');
+                }
+                if (res.data.status === 1) {
+                    setText('已扫码，请完成支付');
+                }
+                if (res.data.status === 2) {
+                    setText('已支付，请等待发货');
+                    clearTimeout(timer);
+                }
+            });
+        }, 1000);
     };
     
     return (
@@ -112,7 +133,7 @@ const OrderScreen = ({ match }) => {
                                           </Row>
                                       </ListGroup.Item>
                                       <ListGroup.Item>
-                                          <Button type='button' className='btn-block' onClick={handleShow}
+                                          <Button type='button' className='btn-block' onClick={handlePayment}
                                                   disabled={order.orderItems === 0}>去支付</Button>
                                           {/*弹出框*/}
                                           <Modal show={show} onHide={handleClose}>
@@ -124,11 +145,11 @@ const OrderScreen = ({ match }) => {
                                                   <p>支付方式：￥{order.paymentMethod}</p>
                                                   <Row>
                                                       <Col md={6} style={{ textAlign: 'center' }}>
-                                                          <Image src='/images/wechat.jpg'/>
+                                                          <Image src={image}/>
                                                           <p style={{
                                                               backgroundColor: '#00C800',
                                                               color: '#fff'
-                                                          }}>请扫码</p>
+                                                          }}>{text}</p>
                                                       </Col>
                                                       <Col>
                                                           <Image src='/images/saoyisao.jpg'/>

@@ -8,6 +8,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import axios from 'axios';
 
 dotenv.config();
 await connectDB();
@@ -26,6 +27,13 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
+
+// 获取支付的status状态码
+app.get('/status', (req, res) => {
+    axios.get('https://www.thenewstep.cn/pay/logs/log.txt').then(response => {
+        res.json({ status: response.data });
+    });
+});
 
 // 设置upload为静态文件夹
 const __dirname = path.resolve();
