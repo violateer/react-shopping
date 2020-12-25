@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Row, Col, Image, Card, ListGroup } from 'react-bootstrap';
+import { Form, Button, Row, Col, Image, Card, ListGroup, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,9 @@ const OrderScreen = ({ match }) => {
     const orderId = match.params.id;
     const dispatch = useDispatch();
     
+    // 弹出框状态
+    const [show, setShow] = useState(false);
+    
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
     
@@ -18,6 +21,14 @@ const OrderScreen = ({ match }) => {
             dispatch(getOrderDetails(orderId));
         }
     }, [dispatch, order, orderId]);
+    
+    // 控制弹出框
+    const handleClose = () => {
+        setShow(false);
+    };
+    const handleShow = () => {
+        setShow(true);
+    };
     
     return (
         loading ? <Loader/>
@@ -99,6 +110,37 @@ const OrderScreen = ({ match }) => {
                                               <Col>订单总价</Col>
                                               <Col>￥{order.totalPrice}</Col>
                                           </Row>
+                                      </ListGroup.Item>
+                                      <ListGroup.Item>
+                                          <Button type='button' className='btn-block' onClick={handleShow}
+                                                  disabled={order.orderItems === 0}>去支付</Button>
+                                          {/*弹出框*/}
+                                          <Modal show={show} onHide={handleClose}>
+                                              <Modal.Header closeButton>
+                                                  <Modal.Title>订单号：{order._id}</Modal.Title>
+                                              </Modal.Header>
+                                              <Modal.Body>
+                                                  <p>支付金额：￥{order.totalPrice}</p>
+                                                  <p>支付方式：￥{order.paymentMethod}</p>
+                                                  <Row>
+                                                      <Col md={6} style={{ textAlign: 'center' }}>
+                                                          <Image src='/images/wechat.jpg'/>
+                                                          <p style={{
+                                                              backgroundColor: '#00C800',
+                                                              color: '#fff'
+                                                          }}>请扫码</p>
+                                                      </Col>
+                                                      <Col>
+                                                          <Image src='/images/saoyisao.jpg'/>
+                                                      </Col>
+                                                  </Row>
+                                              </Modal.Body>
+                                              <Modal.Footer>
+                                                  <Button variant="primary" onClick={handleClose}>
+                                                      关闭
+                                                  </Button>
+                                              </Modal.Footer>
+                                          </Modal>
                                       </ListGroup.Item>
                                   </ListGroup>
                               </Card>
