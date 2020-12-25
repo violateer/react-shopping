@@ -31,7 +31,7 @@ const ProductListScreen = ({ history }) => {
         // 重置创建产品的state
         dispatch({ type: PRODUCT_CREATE_RESET });
         
-        if (!userInfo.isAdmin) {
+        if (!userInfo || !userInfo.isAdmin) {
             history.push('/login');
         }
         if (createSuccess) {
