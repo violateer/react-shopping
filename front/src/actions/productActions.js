@@ -9,7 +9,7 @@ import {
     PRODUCT_DELETE_SUCCESS,
     PRODUCT_DELETE_FAIL,
     PRODUCT_CREATE_REQUEST,
-    PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL
+    PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS, PRODUCT_UPDATE_FAIL
 } from '../constants/productConstants';
 import axios from 'axios';
 import { USER_DELETE_FAIL, USER_DELETE_REQUEST, USER_DELETE_SUCCESS } from '../constants/userConstants';
@@ -85,6 +85,30 @@ export const createProduct = () => async (dispatch, getState) => {
     } catch (err) {
         dispatch({
             type: PRODUCT_CREATE_FAIL,
+            payload: err.response
+                     && err.response.data.message ? err.response.data.message : err.message
+        });
+    }
+};
+
+// 更新产品action
+export const updateProduct = (product) => async (dispatch, getState) => {
+    try {
+        dispatch({ type: PRODUCT_UPDATE_REQUEST });
+        // 获取登陆用户的信息
+        const { userLogin: { userInfo } } = getState();
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        const { data } = await axios.put(`/api/products/${product._id}`, product, config);
+        dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
+    } catch (err) {
+        dispatch({
+            type: PRODUCT_UPDATE_FAIL,
             payload: err.response
                      && err.response.data.message ? err.response.data.message : err.message
         });

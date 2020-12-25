@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { listProductDetails } from '../actions/productActions';
+import { listProductDetails, updateProduct } from '../actions/productActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 
 const ProductEditScreen = ({ match, history }) => {
         const productId = match.params.id;
@@ -23,32 +24,42 @@ const ProductEditScreen = ({ match, history }) => {
         const productDetails = useSelector(state => state.productDetails);
         const { loading, error, product } = productDetails;
         
+        const productUpdate = useSelector(state => state.productUpdate);
+        const { loading: updateLoading, error: updateError, success: updateSuccess } = productUpdate;
+        
         useEffect(() => {
-            if (!product.name || product._id !== productId) {
-                dispatch(listProductDetails(productId));
+            if (updateSuccess) {
+                // 更新成功则重置更新信息并跳转
+                dispatch({ type: PRODUCT_UPDATE_RESET });
+                history.push('/admin/productlist');
             } else {
-                setName(product.name);
-                setPrice(product.price);
-                setImage(product.image);
-                setBrand(product.brand);
-                setCategory(product.category);
-                setCountInStock(product.countInStock);
-                setDescription(product.description);
+                if (!product.name || product._id !== productId) {
+                    dispatch(listProductDetails(productId));
+                } else {
+                    setName(product.name);
+                    setPrice(product.price);
+                    setImage(product.image);
+                    setBrand(product.brand);
+                    setCategory(product.category);
+                    setCountInStock(product.countInStock);
+                    setDescription(product.description);
+                }
             }
-        }, [dispatch, product, productId, history]);
+        }, [dispatch, product, productId, history, updateSuccess]);
         
         // 表单提交
         const submitHandler = (e) => {
             e.preventDefault();
             // 派发更新
+            dispatch(updateProduct({ _id: productId, name, price, image, brand, category, countInStock, description }));
         };
         
         return (
             <FormContainer>
                 <Link to='/admin/productlist' className='btn btn-dark my-3'>返回上一页</Link>
                 <h1>编辑产品信息</h1>
-                {/*{updateLoading && <Loader/>}*/}
-                {/*{updateError && <Message variant='danger'>{updateError}</Message>}*/}
+                {updateLoading && <Loader/>}
+                {updateError && <Message variant='danger'>{updateError}</Message>}
                 {
                     loading ? <Loader/>
                             : error ? <Message variant='danger'>{error}</Message>
