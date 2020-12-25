@@ -3,11 +3,13 @@ import { Form, Button, Row, Col, Image, Card, ListGroup, Modal } from 'react-boo
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import { Link } from 'react-router-dom';
-import { getOrderDetails } from '../actions/orderActions';
+import { getOrderDetails, payOrder } from '../actions/orderActions';
 import Loader from '../components/Loader';
 import axios from 'axios';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { v4 as uuidv4 } from 'uuid';
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
     const orderId = match.params.id;
     const dispatch = useDispatch();
     
@@ -16,14 +18,24 @@ const OrderScreen = ({ match }) => {
     const [image, setImage] = useState('');
     const [text, setText] = useState('请扫码');
     
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+    
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
     
+    const orderPay = useSelector(state => state.orderPay);
+    const { loading: payLoading, error: payError, success: paySuccess } = orderPay;
+    
     useEffect(() => {
-        if (!order || order._id !== orderId) {
+        if (!userInfo) {
+            history.push('/login');
+        }
+        if (!order || order._id !== orderId || paySuccess) {
+            dispatch({ type: ORDER_PAY_RESET });
             dispatch(getOrderDetails(orderId));
         }
-    }, [dispatch, order, orderId]);
+    }, [dispatch, order, orderId, paySuccess, userInfo, history]);
     
     // 控制弹出框
     const handleClose = () => {
@@ -44,7 +56,17 @@ const OrderScreen = ({ match }) => {
                     setText('已扫码，请完成支付');
                 }
                 if (res.data.status === 2) {
+                    // 创建支付结果对象
+                    const paymentResult = {
+                        id: uuidv4(),
+                        status: res.data.status,
+                        update_time: new Date.now(),
+                        email_address: order.user.email
+                    };
+                    // 更新支付完成的订单
+                    dispatch(payOrder(orderId, paymentResult));
                     setText('已支付，请等待发货');
+                    setShow(false);
                     clearTimeout(timer);
                 }
             });
