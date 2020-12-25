@@ -35,6 +35,11 @@ app.get('/status', (req, res) => {
     });
 });
 
+// 获取paypal的clientId
+app.get('/api/config/paypal', (req, res) => {
+    res.send(process.env.PAYPAL_CLIENT_ID);
+});
+
 // 设置upload为静态文件夹
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

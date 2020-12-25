@@ -10,6 +10,7 @@
   MONGO_USER = <username>
   MONGO_PASS = <password>
   JWT_SECRET = abc123
+  PAYPAL_CLIENT_ID = paypal的client id
   ```
 
 
