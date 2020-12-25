@@ -24,7 +24,7 @@ const ProductListScreen = ({ history }) => {
         loading: createLoading,
         error: createError,
         success: createSuccess,
-        product: createProduct
+        product: createdProduct
     } = productCreate;
     
     useEffect(() => {
@@ -35,11 +35,11 @@ const ProductListScreen = ({ history }) => {
             history.push('/login');
         }
         if (createSuccess) {
-            history.push(`/admin/product/${createProduct._id}/edit`);
+            history.push(`/admin/product/${createdProduct._id}/edit`);
         } else {
             dispatch(listProducts());
         }
-    }, [dispatch, userInfo, history, deleteSuccess, createSuccess, createProduct]);
+    }, [dispatch, userInfo, history, deleteSuccess, createSuccess, createdProduct]);
     
     // 删除
     const deleteHandler = (id) => {
