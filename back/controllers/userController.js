@@ -116,7 +116,12 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
  */
 export const getUsers = asyncHandler(async (req, res) => {
     const users = await User.find({});
-    res.json(users);
+    if (users.length !== 0) {
+        res.json(users);
+    } else {
+        res.status(404);
+        throw new Error('未查询到用户');
+    }
 });
 
 /**

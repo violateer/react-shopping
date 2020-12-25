@@ -15,24 +15,28 @@ import {
     userRegisterReducer,
     userUpdateProfileReducer, userUpdateReducer
 } from './reducers/userReducers';
-import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers';
+import { orderCreateReducer, orderDetailsReducer, orderListReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
-    productList: productListReducer,
-    productDetails: productDetailsReducer,
     cart: cartReducer,
+    
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
-    orderCreate: orderCreateReducer,
-    orderDetails: orderDetailsReducer,
     userList: userListReducer,
     userDelete: userDeleteReducer,
     userUpdate: userUpdateReducer,
+    
+    productList: productListReducer,
+    productDetails: productDetailsReducer,
     productDelete: productDeleteReducer,
     productCreate: productCreateReducer,
-    productUpdate: productUpdateReducer
+    productUpdate: productUpdateReducer,
+    
+    orderCreate: orderCreateReducer,
+    orderDetails: orderDetailsReducer,
+    orderList: orderListReducer
 });
 
 // 获取本地存储的购物车信息

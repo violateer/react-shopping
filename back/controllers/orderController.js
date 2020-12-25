@@ -29,6 +29,21 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @desc 获取所有订单
+ * @route GET /api/orders
+ * @access 私密-带token-仅限管理员
+ */
+export const getOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({}).populate('user', 'id name');
+    if (orders.length !== 0) {
+        res.json(orders);
+    } else {
+        res.status(404);
+        throw new Error('未查询到订单');
+    }
+});
+
+/**
  * @desc 获取订单-依据订单id
  * @route GET /api/orders/:id
  * @access 私密
