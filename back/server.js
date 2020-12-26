@@ -9,6 +9,7 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import axios from 'axios';
+import morgan from 'morgan';
 
 dotenv.config();
 await connectDB();
@@ -18,6 +19,10 @@ const port = process.env.PORT || 5000;
 
 // 解析请求体
 app.use(express.json());
+// morgan
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 
 app.get('/', (req, res) => {
     res.send('服务器正在运行');
