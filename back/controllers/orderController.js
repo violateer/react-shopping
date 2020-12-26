@@ -60,11 +60,11 @@ export const getOrderItems = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc 更新支付订单
+ * @desc 更新支付订单付款状态
  * @route PUT /api/orders/:id/pay
  * @access 私密-带token-仅限管理员
  */
-export const updateOrderById = asyncHandler(async (req, res) => {
+export const updateOrderToPaid = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (order) {
         order.isPaid = true;
@@ -75,6 +75,25 @@ export const updateOrderById = asyncHandler(async (req, res) => {
             update_time: req.body.update_time,
             email_address: req.body.email_address
         };
+        
+        const updateOrder = await order.save();
+        res.json(updateOrder);
+    } else {
+        res.status(404);
+        throw new Error('未查询到订单');
+    }
+});
+
+/**
+ * @desc 更新支付订单发货状态
+ * @route PUT /api/orders/:id/deliver
+ * @access 私密-带token-仅限管理员
+ */
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+        order.isDelivered = true;
+        order.deliveredAt = Date.now();
         
         const updateOrder = await order.save();
         res.json(updateOrder);
@@ -98,3 +117,4 @@ export const getMyOrders = asyncHandler(async (req, res) => {
         throw new Error('未查询到任何订单');
     }
 });
+

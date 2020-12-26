@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
     ORDER_CREATE_FAIL,
     ORDER_CREATE_REQUEST,
-    ORDER_CREATE_SUCCESS,
+    ORDER_CREATE_SUCCESS, ORDER_DELIVER_FAIL, ORDER_DELIVER_REQUEST, ORDER_DELIVER_SUCCESS,
     ORDER_DETAILS_FAIL,
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
@@ -86,7 +86,7 @@ export const getOrderList = () => async (dispatch, getState) => {
     }
 };
 
-// 完成支付订单action
+// 完成支付订单支付状态action
 export const payOrder = (orderId, paymentResult) => async (dispatch, getState) => {
     try {
         dispatch({ type: ORDER_PAY_REQUEST });
@@ -110,6 +110,34 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
         }
         dispatch({
             type: ORDER_PAY_FAIL,
+            payload: message
+        });
+    }
+};
+
+// 完成支付订单发货状态action
+export const deliverOrder = (order) => async (dispatch, getState) => {
+    try {
+        dispatch({ type: ORDER_DELIVER_REQUEST });
+        // 获取登陆用户的信息
+        const { userLogin: { userInfo } } = getState();
+        
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const { data } = await axios.put(`/api/orders/${order._id}/deliver`, {}, config);
+        dispatch({ type: ORDER_DELIVER_SUCCESS, payload: data });
+    } catch (err) {
+        const message = err.response
+                        && err.response.data.message ? err.response.data.message : err.message;
+        if (message === '未授权的请求，token不存在') {
+            dispatch(logout());
+        }
+        dispatch({
+            type: ORDER_DELIVER_FAIL,
             payload: message
         });
     }

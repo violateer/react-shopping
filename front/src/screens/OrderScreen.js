@@ -4,10 +4,10 @@ import { Form, Button, Row, Col, Image, Card, ListGroup, Modal } from 'react-boo
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import { Link } from 'react-router-dom';
-import { getOrderDetails, payOrder } from '../actions/orderActions';
+import { deliverOrder, getOrderDetails, payOrder } from '../actions/orderActions';
 import Loader from '../components/Loader';
 import axios from 'axios';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 import { v4 as uuidv4 } from 'uuid';
 
 const OrderScreen = ({ match, history }) => {
@@ -33,6 +33,9 @@ const OrderScreen = ({ match, history }) => {
     const orderPay = useSelector(state => state.orderPay);
     const { loading: payLoading, error: payError, success: paySuccess } = orderPay;
     
+    const orderDeliver = useSelector(state => state.orderDeliver);
+    const { loading: deliverLoading, success: deliverSuccess } = orderDeliver;
+    
     useEffect(() => {
         // 动态创建paypal script
         const addPayPalScript = async () => {
@@ -52,8 +55,9 @@ const OrderScreen = ({ match, history }) => {
             history.push('/login');
         }
         
-        if (!order || order._id !== orderId || paySuccess) {
+        if (!order || order._id !== orderId || paySuccess || deliverSuccess) {
             dispatch({ type: ORDER_PAY_RESET });
+            dispatch({ type: ORDER_DELIVER_RESET });
             dispatch(getOrderDetails(orderId));
         } else if (!order.isPaid) {
             if (!window.paypal) {
@@ -73,7 +77,7 @@ const OrderScreen = ({ match, history }) => {
             }));
             setPaypalStatus(false);
         }
-    }, [dispatch, order, orderId, paySuccess, userInfo, history, paypalStatus]);
+    }, [dispatch, order, orderId, paySuccess, userInfo, history, paypalStatus, deliverSuccess]);
     
     // 控制弹出框-微信
     const handleClose = () => {
@@ -111,9 +115,14 @@ const OrderScreen = ({ match, history }) => {
         }, 1000);
     };
     
-    // paypal支付按钮
+    // paypal支付成功
     const successPaymentHandler = (details, data) => {
         setPaypalStatus(true);
+    };
+    
+    // 点击发货
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order));
     };
     
     return (
@@ -244,6 +253,13 @@ const OrderScreen = ({ match, history }) => {
                                                       </Button>
                                                   </Modal.Footer>
                                               </Modal>
+                                          </ListGroup.Item>
+                                      )}
+                                      {userInfo?.isAdmin && order.isPaid && !order.isDelivered && (
+                                          <ListGroup.Item>
+                                              {/*发货按钮*/}
+                                              <Button type='button' className='btn-block'
+                                                      onClick={deliverHandler}>发货</Button>
                                           </ListGroup.Item>
                                       )}
                                   </ListGroup>
