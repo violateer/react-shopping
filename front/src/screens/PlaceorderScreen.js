@@ -5,6 +5,8 @@ import CheckOutSteps from '../components/CheckOutSteps';
 import Message from '../components/Message';
 import { Link } from 'react-router-dom';
 import { createOrder } from '../actions/orderActions';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
+import { USER_DETAILS_RESET } from '../constants/userConstants';
 
 const PlaceorderScreen = ({ history }) => {
     const cart = useSelector(state => state.cart);
@@ -30,8 +32,10 @@ const PlaceorderScreen = ({ history }) => {
     useEffect(() => {
         if (success) {
             history.push(`/order/${order._id}`);
+            dispatch({ type: ORDER_CREATE_RESET });
+            dispatch({ type: USER_DETAILS_RESET });
         }
-    }, [history, success, order]);
+    }, [history, success, order, dispatch]);
     
     // 提交订单
     const placeorderHandler = () => {

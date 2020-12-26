@@ -18,7 +18,12 @@ import {
     PRODUCT_UPDATE_RESET,
     PRODUCT_CREATE_REVIEW_REQUEST,
     PRODUCT_CREATE_REVIEW_SUCCESS,
-    PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_CREATE_REVIEW_RESET, PRODUCT_TOP_REQUEST, PRODUCT_TOP_SUCCESS, PRODUCT_TOP_FAIL
+    PRODUCT_CREATE_REVIEW_FAIL,
+    PRODUCT_CREATE_REVIEW_RESET,
+    PRODUCT_TOP_REQUEST,
+    PRODUCT_TOP_SUCCESS,
+    PRODUCT_TOP_FAIL,
+    PRODUCT_DETAILS_RESET
 } from '../constants/productConstants';
 import { act } from '@testing-library/react';
 
@@ -65,6 +70,8 @@ export const productDetailsReducer = (state = { product: {} }, action) => {
                 loading: false,
                 error: action.payload
             };
+        case PRODUCT_DETAILS_RESET:
+            return { product: {} };
         default:
             return state;
     }
