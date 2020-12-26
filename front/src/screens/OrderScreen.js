@@ -21,6 +21,8 @@ const OrderScreen = ({ match, history }) => {
     const [text, setText] = useState('请扫码');
     // SDK
     const [SDK, setSDK] = useState(false);
+    // 支付状态
+    const [paypalStatus, setPaypalStatus] = useState(false);
     
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -60,7 +62,18 @@ const OrderScreen = ({ match, history }) => {
                 setShow(true);
             }
         }
-    }, [dispatch, order, orderId, paySuccess, userInfo, history]);
+        
+        // paypal支付成功
+        if (paypalStatus) {
+            dispatch(payOrder(orderId, {
+                id: uuidv4(),
+                status: 2,
+                update_time: Date.now(),
+                email_address: order.user.email
+            }));
+            setPaypalStatus(false);
+        }
+    }, [dispatch, order, orderId, paySuccess, userInfo, history, paypalStatus]);
     
     // 控制弹出框-微信
     const handleClose = () => {
@@ -99,8 +112,8 @@ const OrderScreen = ({ match, history }) => {
     };
     
     // paypal支付按钮
-    const successPaymentHandler = (paymentResult) => {
-        console.log(paymentResult);
+    const successPaymentHandler = (details, data) => {
+        setPaypalStatus(true);
     };
     
     return (
