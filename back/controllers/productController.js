@@ -3,11 +3,19 @@ import asyncHandler from 'express-async-handler';
 
 /**
  * @desc 请求所有产品
- * @route GET /api/products
+ * @route GET /api/products?keyword=${keyword}
  * @access 公开
  */
 export const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({});
+    const keyword = req.query.keyword ? {
+        name: {
+            // 不完全匹配
+            $regex: req.query.keyword,
+            // 不区分大小写
+            $options: 'i'
+        }
+    } : {};
+    const products = await Product.find({ ...keyword });
     if (products) {
         res.json(products);
     } else {
