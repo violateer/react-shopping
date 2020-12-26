@@ -7,6 +7,10 @@ import asyncHandler from 'express-async-handler';
  * @access 公开
  */
 export const getProducts = asyncHandler(async (req, res) => {
+    // 每页的产品数量
+    const pageSize = 2;
+    const page = Number(req.query.pageNumber) || 1;
+    // 查询
     const keyword = req.query.keyword ? {
         name: {
             // 不完全匹配
@@ -15,9 +19,14 @@ export const getProducts = asyncHandler(async (req, res) => {
             $options: 'i'
         }
     } : {};
-    const products = await Product.find({ ...keyword });
+    
+    // 所有产品的数量-可包含关键词
+    const count = await Product.countDocuments({ ...keyword });
+    const products = await Product.find({ ...keyword })
+                                  .limit(pageSize)
+                                  .skip(pageSize * (page - 1));
     if (products) {
-        res.json(products);
+        res.json({ products, page, pages: Math.ceil(count / pageSize) });
     } else {
         res.status(404);
         throw new Error('查询不到任何产品');
