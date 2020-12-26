@@ -97,3 +97,41 @@ export const updateProduct = asyncHandler(async (req, res) => {
         throw new Error('未找到该产品');
     }
 });
+
+/**
+ * @desc 创建产品评论
+ * @route POST /api/products/:id/reviews
+ * @access 私密-带token
+ */
+export const createProductReview = asyncHandler(async (req, res) => {
+    const { rating, comment } = req.body;
+    const product = await Product.findById(req.params.id);
+    
+    if (product) {
+        // 判断该用户是否已评论
+        const alreadyReviewed = product.reviews.find(review => review.user.toString() === req.user._id.toString());
+        if (alreadyReviewed) {
+            res.status(400);
+            throw new Error('您已经评论过该产品！');
+        }
+        
+        // 创建评论
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id
+        };
+        product.reviews.push(review);
+        
+        // 更新评论数及总评分
+        product.numReviews = product.reviews.length;
+        product.rating = product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.numReviews;
+        await product.save();
+        res.status(201);
+        res.json({ message: '评论成功' });
+    } else {
+        res.status(404);
+        throw new Error('未找到该产品');
+    }
+});

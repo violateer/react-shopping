@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 // 评论模型
 const reviewSchema = new Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
     name: {
         type: String,
         required: true
