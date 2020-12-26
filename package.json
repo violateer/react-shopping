@@ -4,12 +4,12 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node back/server.js",
-    "server": "nodemon back/server.js",
-    "client": "yarn --cwd front start",
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "yarn --cwd frontend start",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
-    "data:insert": "node back/seeder",
-    "data:destroy": "node back/seeder -d"
+    "data:insert": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
   },
   "repository": "git@github.com:violateer/react-shopping.git",
   "author": "violateer <1828257089@qq.com>",
