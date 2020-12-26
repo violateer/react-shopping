@@ -6,7 +6,7 @@ import {
     ORDER_DETAILS_FAIL,
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
-    ORDER_LIST_FAIL,
+    ORDER_LIST_FAIL, ORDER_LIST_MY_FAIL, ORDER_LIST_MY_REQUEST, ORDER_LIST_MY_SUCCESS,
     ORDER_LIST_REQUEST,
     ORDER_LIST_SUCCESS, ORDER_PAY_FAIL,
     ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS
@@ -111,6 +111,30 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
         dispatch({
             type: ORDER_PAY_FAIL,
             payload: message
+        });
+    }
+};
+
+// 获取登录用户所有订单action
+export const getMyOrderList = () => async (dispatch, getState) => {
+    try {
+        dispatch({ type: ORDER_LIST_MY_REQUEST });
+        // 获取登陆用户的信息
+        const { userLogin: { userInfo } } = getState();
+        
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const { data } = await axios.get(`/api/orders/myorders`, config);
+        dispatch({ type: ORDER_LIST_MY_SUCCESS, payload: data });
+    } catch (err) {
+        dispatch({
+            type: ORDER_LIST_MY_FAIL,
+            payload: err.response
+                     && err.response.data.message ? err.response.data.message : err.message
         });
     }
 };

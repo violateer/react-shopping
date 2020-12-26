@@ -83,3 +83,18 @@ export const updateOrderById = asyncHandler(async (req, res) => {
         throw new Error('未查询到订单');
     }
 });
+
+/**
+ * @desc 获取登录用户所有订单
+ * @route GET /api/orders/myorders
+ * @access 私密-带token
+ */
+export const getMyOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.user._id });
+    if (orders) {
+        res.json(orders);
+    } else {
+        res.status(404);
+        throw new Error('未查询到任何订单');
+    }
+});

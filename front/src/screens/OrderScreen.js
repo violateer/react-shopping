@@ -197,7 +197,7 @@ const OrderScreen = ({ match, history }) => {
                                               <Col>￥{order.totalPrice}</Col>
                                           </Row>
                                       </ListGroup.Item>
-                                      {order.paymentMethod === 'PayPal' && (
+                                      {order.paymentMethod === 'PayPal' && !order.isPaid && (
                                           <ListGroup.Item>
                                               {/*PayPal支付按钮*/}
                                               {!SDK ? <Loader/> : (
@@ -208,7 +208,12 @@ const OrderScreen = ({ match, history }) => {
                                               )}
                                           </ListGroup.Item>
                                       )}
-                                      {order.paymentMethod === '微信' && (
+                                      {order.isPaid && (
+                                          <ListGroup.Item>
+                                              <Button type='button' className='btn-block' disabled>已完成支付</Button>
+                                          </ListGroup.Item>
+                                      )}
+                                      {order.paymentMethod === '微信' && !order.isPaid && (
                                           <ListGroup.Item>
                                               {/*微信支付按钮*/}
                                               <Button type='button' className='btn-block' onClick={handlePayment}

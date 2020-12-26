@@ -15,7 +15,13 @@ import {
     userRegisterReducer,
     userUpdateProfileReducer, userUpdateReducer
 } from './reducers/userReducers';
-import { orderCreateReducer, orderDetailsReducer, orderListReducer, orderPayReducer } from './reducers/orderReducers';
+import {
+    orderCreateReducer,
+    orderDetailsReducer,
+    orderListMyReducer,
+    orderListReducer,
+    orderPayReducer
+} from './reducers/orderReducers';
 
 const reducer = combineReducers({
     cart: cartReducer,
@@ -37,6 +43,7 @@ const reducer = combineReducers({
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderList: orderListReducer,
+    orderListMy: orderListMyReducer,
     orderPay: orderPayReducer
 });
 
