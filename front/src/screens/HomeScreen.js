@@ -6,6 +6,7 @@ import { listProducts } from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
+import ProductsCarousel from '../components/ProductsCarousel';
 
 const HomeScreen = ({ match }) => {
     const keyword = match.params.keyword;
@@ -22,6 +23,7 @@ const HomeScreen = ({ match }) => {
     
     return (
         <>
+            {!keyword && <ProductsCarousel/>}
             {loading ? <Loader/> : error ? <Message variant='danger'>{error}</Message> : (
                 <>
                     <h1>最新产品</h1>
@@ -37,6 +39,7 @@ const HomeScreen = ({ match }) => {
             )}
         </>
     );
-};
+}
+;
 
 export default HomeScreen;

@@ -14,7 +14,11 @@ import {
     PRODUCT_UPDATE_REQUEST,
     PRODUCT_UPDATE_SUCCESS,
     PRODUCT_UPDATE_FAIL,
-    PRODUCT_CREATE_REVIEW_REQUEST, PRODUCT_CREATE_REVIEW_SUCCESS, PRODUCT_CREATE_REVIEW_FAIL
+    PRODUCT_CREATE_REVIEW_REQUEST,
+    PRODUCT_CREATE_REVIEW_SUCCESS,
+    PRODUCT_CREATE_REVIEW_FAIL,
+    PRODUCT_TOP_REQUEST,
+    PRODUCT_TOP_SUCCESS, PRODUCT_TOP_FAIL
 } from '../constants/productConstants';
 import axios from 'axios';
 import { USER_DELETE_FAIL, USER_DELETE_REQUEST, USER_DELETE_SUCCESS } from '../constants/userConstants';
@@ -138,6 +142,21 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
     } catch (err) {
         dispatch({
             type: PRODUCT_CREATE_REVIEW_FAIL,
+            payload: err.response
+                     && err.response.data.message ? err.response.data.message : err.message
+        });
+    }
+};
+
+// 获取评分前三产品的action
+export const listTopProducts = () => async (dispatch) => {
+    try {
+        dispatch({ type: PRODUCT_TOP_REQUEST });
+        const { data } = await axios.get(`/api/products/top`);
+        dispatch({ type: PRODUCT_TOP_SUCCESS, payload: data });
+    } catch (err) {
+        dispatch({
+            type: PRODUCT_TOP_FAIL,
             payload: err.response
                      && err.response.data.message ? err.response.data.message : err.message
         });

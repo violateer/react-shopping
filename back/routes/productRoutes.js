@@ -4,7 +4,7 @@ import {
     getProductById,
     deleteProductById,
     createProduct,
-    updateProduct, createProductReview
+    updateProduct, createProductReview, getTopProduct
 } from '../controllers/productController.js';
 import { isAdmin, protect } from '../middleware/authMiddleware.js';
 
@@ -13,6 +13,9 @@ const router = express.Router();
 router.route('/')
       .get(getProducts)
       .post(protect, isAdmin, createProduct);
+
+router.route('/top')
+      .get(getTopProduct);
 
 router.route('/:id')
       .get(getProductById)

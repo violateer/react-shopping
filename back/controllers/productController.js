@@ -152,3 +152,18 @@ export const createProductReview = asyncHandler(async (req, res) => {
         throw new Error('未找到该产品');
     }
 });
+
+/**
+ * @desc 请求排名前三的产品
+ * @route GET /api/products/top
+ * @access 公开
+ */
+export const getTopProduct = asyncHandler(async (req, res) => {
+    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+    if (products) {
+        res.json(products);
+    } else {
+        res.status(404);
+        throw new Error('查询不到该产品');
+    }
+});
