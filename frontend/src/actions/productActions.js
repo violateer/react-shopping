@@ -21,7 +21,6 @@ import {
     PRODUCT_TOP_SUCCESS, PRODUCT_TOP_FAIL
 } from '../constants/productConstants';
 import axios from 'axios';
-import { USER_DELETE_FAIL, USER_DELETE_REQUEST, USER_DELETE_SUCCESS } from '../constants/userConstants';
 
 // 获取所有产品的action
 export const listProducts = (keyword = '', pageNumber = '') => async (dispatch) => {
